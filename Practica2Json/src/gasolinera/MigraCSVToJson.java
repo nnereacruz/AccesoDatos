@@ -12,7 +12,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.util.*;
 import java.io.*;
-public class MigraCSVToJson {
+public class MigraCSVToJson {  //Esta clase la cree antes de usar la interfaz persistencia, literalmente es una clase traductora pero que no voy a utilizar ya que voy a usar otra logica para el programa
     private final Path ficheroCSVcl = Path.of("datos", "clientes.csv");
     private final Path ficheroJSONcl = Path.of("datos", "clientes.json");
     private final Path fichreroCSVpg = Path.of("datos", "pagos.csv");

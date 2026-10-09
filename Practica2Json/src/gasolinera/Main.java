@@ -13,7 +13,8 @@ import java.util.*;
 public class Main {
     public static void main(String[] args) {
          Scanner sc = new Scanner(System.in);
-      Gasolinera gasolinera=new Gasolinera();
+         Persistencia persistencia = new FicherosJSON();//linea que defie que tipo de archivos va a usar el programa
+      Gasolinera gasolinera=new Gasolinera(persistencia);
         int opcion=-1;
         
         while(opcion!=0){//menu que se repetira hasta que el usuario ingrese 0

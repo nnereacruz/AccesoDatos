@@ -13,16 +13,15 @@ import java.util.*;
 import java.time.LocalDate;
 public class Gasolinera { //clase que manejara todos los metodos necesarios
 
-List<Clientes> listaclientes = new ArrayList<>();
+List<Cliente> listaclientes = new ArrayList<>();
 List <Pagos> listapagos = new ArrayList<>();
-Ficheros fichero = new Ficheros();
-MigraCSVToJson json = new MigraCSVToJson();
+Persistencia persistencia;
 
-    public Gasolinera() {
-        
-        fichero.crearFicheros();
-        fichero.cargarClientes(listaclientes);
-        fichero.cargarPagos(listapagos);
+    public Gasolinera(Persistencia persistencia) {
+    this.persistencia=persistencia;
+        persistencia.crearFichero();
+        persistencia.cargarClientes(listaclientes);
+        persistencia.cargarPagos(listapagos);
     
             
         
@@ -44,7 +43,7 @@ MigraCSVToJson json = new MigraCSVToJson();
     matricula= sc.nextLine();
    
     }
-     for(Clientes cl:listaclientes){
+     for(Cliente cl:listaclientes){
         if(cl.getMatricula().equalsIgnoreCase(matricula)){
             System.out.println("Esta matricula ya esta registrada");
         return;}
@@ -56,10 +55,10 @@ MigraCSVToJson json = new MigraCSVToJson();
      telefono = sc.nextInt();
     
     }
-     Clientes cliente=new Clientes(nombre,matricula,telefono);
+     Cliente cliente=new Cliente(nombre,matricula,telefono);
      listaclientes.add(cliente);
-    fichero.guardarClientes(cliente);
-    json.migrarClientes();
+    persistencia.guardarCliente(cliente);
+
      System.out.println("Cliente guardado:"+cliente.getId()+" "+nombre+" "+matricula+" "+telefono);
      
      
@@ -68,7 +67,7 @@ MigraCSVToJson json = new MigraCSVToJson();
 
 public void listarClientes(){//metodo para listar a todos los clientes añadidos
     System.out.println("==LISTA CLIENTES==");
-    for(Clientes cl : listaclientes){
+    for(Cliente cl : listaclientes){
         System.out.println(cl);
     }
     
@@ -85,7 +84,7 @@ public void listarClientes(){//metodo para listar a todos los clientes añadidos
      
      
      boolean encontrado = false;
-     for(Clientes cl:listaclientes){
+     for(Cliente cl:listaclientes){
          if(cl.getNombre().toLowerCase().contains(texto)|| cl.getMatricula().toLowerCase().contains(texto)|| String.valueOf(cl.getTelefono()).contains(texto)){
              System.out.println(cl);
              encontrado=true;
@@ -110,7 +109,7 @@ public void listarClientes(){//metodo para listar a todos los clientes añadidos
              return;
          }
          System.out.println("==CLIENTES DISPONIBLES==");
-         for(Clientes cl :listaclientes){
+         for(Cliente cl :listaclientes){
              System.out.println(cl);
          }
          System.out.println("Introduce id cliente para procesar pago:");
@@ -120,8 +119,8 @@ public void listarClientes(){//metodo para listar a todos los clientes añadidos
          while(id<0){
              System.out.println("El id debe ser un numero positivo, introduce uno:");
          }
-         Clientes cliente =null;
-         for(Clientes cl:listaclientes){
+         Cliente cliente =null;
+         for(Cliente cl:listaclientes){
              if(cl.getId()==id){
                  cliente=cl;
                  
@@ -171,8 +170,7 @@ public void listarClientes(){//metodo para listar a todos los clientes añadidos
          }
          Pagos pago = new Pagos(id,fecha,importe,litros,combustible);
          listapagos.add(pago);
-         fichero.guardarPagos(pago);
-         json.migrarPagos();
+         persistencia.guardarPago(pago);
          System.out.println("==CONFIRMACION==");
          System.out.println(pago.getId()+" "+cliente.getNombre()+" "+importe+"€");
          
